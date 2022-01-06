@@ -23,6 +23,6 @@ Map<String, dynamic> _$$_OrderEntityToJson(_$_OrderEntity instance) =>
     };
 
 const _$SideEnumEnumMap = {
-  SideEnum.sell: 'sell',
+  SideEnum.ask: 'sell',
   SideEnum.buy: 'buy',
 };

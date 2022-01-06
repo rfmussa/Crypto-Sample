@@ -18,7 +18,7 @@ class SocketRepositoryImpl implements SocketRepository {
   }
 
   @override
-  Stream<SocketResult> subscribe(String channelID) {
+  Stream<SocketResult> subscribe() {
     return remoteDataSource.subscribe();
   }
 }

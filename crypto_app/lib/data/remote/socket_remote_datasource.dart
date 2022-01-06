@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:crypto_app/data/model/order_model.dart';
@@ -37,6 +38,7 @@ class RemoteDataSource implements IRemoteDataSource {
   }
 }
 
+//TODO transform into compute function
 SocketResult mapResponseToResult(dynamic message) {
   final decodedJson = json.decode(message);
   // use  feed message to distinguish between snapshot and ticks
@@ -44,7 +46,7 @@ SocketResult mapResponseToResult(dynamic message) {
     if (decodedJson['feed'] == 'book_snapshot') {
       SnapshotModel snapshot = SnapshotModel.fromJson(decodedJson);
       var askList = snapshot.asks
-          .map((e) => OrderEntry.sell(price: e.price, quantity: e.qty))
+          .map((e) => OrderEntry.ask(price: e.price, quantity: e.qty))
           .toList();
       var bidsList = snapshot.bids
           .map((e) => OrderEntry.bid(price: e.price, quantity: e.qty))

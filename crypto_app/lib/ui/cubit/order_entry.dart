@@ -15,14 +15,12 @@ class OrderEntry with _$OrderEntry {
   factory OrderEntry.bid({
     required double price,
     required double quantity,
-  }) =>
-      OrderEntry(price: price, quantity: quantity, side: SideEnum.buy);
+  }) => OrderEntry(price: price, quantity: quantity, side: SideEnum.buy);
 
-  factory OrderEntry.sell({
+  factory OrderEntry.ask({
     required double price,
     required double quantity,
-  }) =>
-      OrderEntry(price: price, quantity: quantity, side: SideEnum.sell);
+  }) => OrderEntry(price: price, quantity: quantity, side: SideEnum.ask);
 
   double amount() {
     return price * quantity;

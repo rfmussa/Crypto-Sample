@@ -22,6 +22,6 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     };
 
 const _$SideEnumEnumMap = {
-  SideEnum.sell: 'sell',
+  SideEnum.ask: 'sell',
   SideEnum.buy: 'buy',
 };

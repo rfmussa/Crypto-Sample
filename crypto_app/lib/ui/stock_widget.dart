@@ -35,94 +35,82 @@ class StockWidget extends StatelessWidget {
                                 color: Colors.black45)));
                   }))
         ]),
-        Expanded(
-            child: Row(
-          children: [
-            Expanded(
-              child: BlocConsumer<OrderCubit, OrderState>(
-                  listener: (context, state) {},
-                  buildWhen: (previous, current) {
-                    return previous.bids != current.bids;
-                  },
-                  builder: (context, state) {
-                    return FractionallySizedBox(
-                        widthFactor: 1,
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 4.0),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5.0,
-                              horizontal: 10.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: kTableBackground,
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.white,
-                              ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: DataTable(
-                                dataRowHeight: 40,
-                                columnSpacing: 24,
-                                horizontalMargin: 10,
-                                columns: _createColumns(),
-                                rows: _createRows(state.bids,
-                                    onCellClick: (OrderEntry selected) {
-                                  context
-                                      .read<OrderCubit>()
-                                      .setSelected(selected);
-                                }))));
-                  }),
+        Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 5.0,
+              horizontal: 0.0,
             ),
-            Expanded(
-              child: BlocConsumer<OrderCubit, OrderState>(
-                  listener: (context, state) {},
-                  buildWhen: (previous, current) {
-                    return previous.asks != current.asks;
-                  },
-                  builder: (context, state) {
-                    return FractionallySizedBox(
-                        widthFactor: 1,
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5.0,
-                              horizontal: 0.0,
-                            ),
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              color: kTableBackground,
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.white,
-                              ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: DataTable(
-                                columnSpacing: 24,
-                                dataRowHeight: 40,
-                                // decoration: BoxDecoration(
-                                //   border: Border.all(
-                                //     width: 1,
-                                //     color: Colors.deepPurple,
-                                //   ),
-                                //   borderRadius:
-                                //       BorderRadius.all(Radius.circular(10)),
-                                // ),
-                                horizontalMargin: 12,
-                                columns: _createColumns(),
-                                rows: _createRows(state.asks,
-                                    onCellClick: (OrderEntry selected) {
-                                  context
-                                      .read<OrderCubit>()
-                                      .setSelected(selected);
-                                }))));
-                  }),
-            )
-          ],
-        ))
+            decoration: BoxDecoration(
+              color: kTableBackground,
+              border: Border.all(
+                width: 1,
+                color: Colors.white,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: BlocConsumer<OrderCubit, OrderState>(
+                      listener: (context, state) {},
+                      buildWhen: (previous, current) {
+                        return previous.bids != current.bids;
+                      },
+                      builder: (context, state) {
+                        return FractionallySizedBox(
+                            widthFactor: 1,
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                                // margin:
+                                //     EdgeInsets.symmetric(horizontal: 4.0),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5.0
+                                ),
+                                child: DataTable(
+                                    dataRowHeight: 40,
+                                    columnSpacing: 24,
+                                    horizontalMargin: 10,
+                                    columns: _createColumns(),
+                                    rows: _createRows(state.bids,
+                                        onCellClick: (OrderEntry selected) {
+                                      context
+                                          .read<OrderCubit>()
+                                          .setSelected(selected);
+                                    }))));
+                      }),
+                ),
+                Expanded(
+                  child: BlocConsumer<OrderCubit, OrderState>(
+                      listener: (context, state) {},
+                      buildWhen: (previous, current) {
+                        return previous.asks != current.asks;
+                      },
+                      builder: (context, state) {
+                        return FractionallySizedBox(
+                            widthFactor: 1,
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5.0
+                                ),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 0.0),
+                                child: DataTable(
+                                    dataRowHeight: 40,
+                                    columnSpacing: 24,
+                                    horizontalMargin: 10,
+                                    columns: _createColumns(),
+                                    rows: _createRows(state.asks,
+                                        onCellClick: (OrderEntry selected) {
+                                      context
+                                          .read<OrderCubit>()
+                                          .setSelected(selected);
+                                    }))));
+                      }),
+                )
+              ],
+            ))
       ],
     ));
   }
@@ -134,9 +122,9 @@ class StockWidget extends StatelessWidget {
     ];
   }
 
-  List<DataRow> _createRows(List<OrderEntry> deltas,
+  List<DataRow> _createRows(List<OrderEntry> entries,
       {required Function(OrderEntry) onCellClick}) {
-    return deltas
+    return entries
         .take(10)
         .map((delta) => DataRow(
               cells: [
@@ -156,6 +144,4 @@ class StockWidget extends StatelessWidget {
             ))
         .toList();
   }
-
-  void _populateForm(OrderEntry delta) {}
 }

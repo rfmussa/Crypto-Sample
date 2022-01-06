@@ -20,7 +20,7 @@ class OrderEntity with _$OrderEntity {
 
 enum SideEnum {
   @JsonValue('sell')
-  sell,
+  ask,
   @JsonValue('buy')
   buy,
 }

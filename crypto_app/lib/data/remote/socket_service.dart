@@ -1,4 +1,3 @@
-import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 const socketURL = 'wss://futures.kraken.com/ws/v1';
