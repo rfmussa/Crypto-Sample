@@ -1,5 +1,4 @@
 import 'package:crypto_app/di/locator.dart';
-import 'package:crypto_app/data/model/order_model.dart';
 import 'package:crypto_app/ui/colors.dart';
 import 'package:crypto_app/ui/cubit/order_cubit.dart';
 import 'package:crypto_app/ui/stock_widget.dart';
@@ -42,11 +41,12 @@ class MyApp extends StatelessWidget {
             ).apply(
               bodyColor: Colors.white
             ),
+            dividerColor: Colors.white12,
             brightness: Brightness.dark,
             canvasColor: kPrimaryColor,
-            primaryColor: Colors.lightBlue[800]
+            primaryColor: kPrimaryColor
           ),
-          home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          home: const MyHomePage(title: ' Futures Order Book'),
         )
     );
   }
@@ -71,13 +71,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<OrderModel> chatMessages = [];
-
-  List<OrderModel> get messages => chatMessages;
-
-  final orderCubit = locator.get<OrderCubit>();
-
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -112,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
             children:  const <Widget>[
-              StockWidget()
+              BookWidget()
             ]
         ),
       ),

@@ -16,26 +16,26 @@ class OrderCubit extends Cubit<OrderState> {
 
   Future<void> getOrdersFor() async {
     _socketRepository.subscribe().listen((result) {
-      result.when(snapshot: (bids, asks) async {
+      result.when(snapshot: (bids, asks)  {
         // snapshotReceived
+        //we assume data is already sorted from socket
         emit(state.copyWith(bids: bids, asks: asks, isLoading: false));
-      }, tick: (order) {
-        // heartBeat/tick
+      }, tick: (order) async {
+        // tick
         if (order.side == SideEnum.buy) {
           sortByPrice(state.bids, order,
               onSort: (List<OrderEntry> sortedList) {
                 emit(state.copyWith(bids: sortedList));
               });
-          } else if (order.side == SideEnum.ask) {
+              } else if (order.side == SideEnum.ask)
+          {
             sortByPrice(state.asks, order,
                 onSort: (List<OrderEntry> sortedList) {
              emit(state.copyWith(asks: sortedList));
             });
-
-
-        }
-      }, error: (message) {
-        print("$message");
+          }
+        }, error: (message) {
+        print(message);
       });
     });
   }
@@ -48,8 +48,8 @@ class OrderCubit extends Cubit<OrderState> {
     ]
     // remove duplicates
       ..removeWhere((element) =>
-          element.price == newEntry.price &&
-              element.quantity != newEntry.quantity)
+      element.price == newEntry.price &&
+          element.quantity != newEntry.quantity)
     // sort
       ..sort((a, b) {
         if (newEntry.side == SideEnum.buy) {
@@ -60,9 +60,7 @@ class OrderCubit extends Cubit<OrderState> {
       });
 
     onSort(setList);
-
   }
-
 
   void setSelected(OrderEntry orderEntry) {
     emit(state.copyWith(selectedEntry: orderEntry));
@@ -73,7 +71,6 @@ class OrderCubit extends Cubit<OrderState> {
     // _socketRepository.closeConnection();
     return super.close();
   }
-
 }
 
 

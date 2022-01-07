@@ -7,8 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StockWidget extends StatelessWidget {
-  const StockWidget({Key? key}) : super(key: key);
+const maxDepth = 10;
+
+class BookWidget extends StatelessWidget {
+  const BookWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +26,58 @@ class StockWidget extends StatelessWidget {
                     return previous.selectedEntry != current.selectedEntry;
                   },
                   builder: (context, state) {
-                    return TextField(
-                        controller: TextEditingController(
-                            text: state.selectedEntry?.quantity.toString()),
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                            hintText: "Quantity",
-                            hintStyle: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black45)));
+                    return Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5.0,
+                          horizontal: 10.0,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: kCardBackground,
+                          shape: BoxShape.rectangle,
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10.0,
+                              offset: Offset(0.0, 10.0),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: TextField(
+                            controller: TextEditingController(
+                                text: state.selectedEntry?.quantity.toString()),
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                labelText: "Quantity",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                hintStyle: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.black45))));
                   }))
         ]),
         Container(
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10.0),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10.0),
             padding: const EdgeInsets.symmetric(
               vertical: 5.0,
               horizontal: 0.0,
             ),
-            decoration: BoxDecoration(
-              color: kTableBackground,
-              border: Border.all(
-                width: 1,
-                color: Colors.white,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            decoration: const BoxDecoration(
+              color: kCardBackground,
+              shape: BoxShape.rectangle,
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10.0,
+                  offset: Offset(0.0, 10.0),
+                ),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: Row(
               children: [
@@ -65,14 +94,19 @@ class StockWidget extends StatelessWidget {
                             child: Container(
                                 // margin:
                                 //     EdgeInsets.symmetric(horizontal: 4.0),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5.0
-                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
                                 child: DataTable(
                                     dataRowHeight: 40,
                                     columnSpacing: 24,
                                     horizontalMargin: 10,
-                                    columns: _createColumns(),
+                                    columns: const [
+                                      DataColumn(
+                                          label: Text('Quantity'),
+                                          numeric: false),
+                                      DataColumn(
+                                          label: Text('Price'), numeric: true),
+                                    ],
                                     rows: _createRows(state.bids,
                                         onCellClick: (OrderEntry selected) {
                                       context
@@ -91,16 +125,21 @@ class StockWidget extends StatelessWidget {
                         return FractionallySizedBox(
                             widthFactor: 1,
                             child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5.0
-                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 0.0),
                                 child: DataTable(
                                     dataRowHeight: 40,
                                     columnSpacing: 24,
                                     horizontalMargin: 10,
-                                    columns: _createColumns(),
+                                    columns: const [
+                                      DataColumn(
+                                          label: Text('Price'), numeric: true),
+                                      DataColumn(
+                                          label: Text('Quantity'),
+                                          numeric: true),
+                                    ],
                                     rows: _createRows(state.asks,
                                         onCellClick: (OrderEntry selected) {
                                       context
@@ -115,33 +154,37 @@ class StockWidget extends StatelessWidget {
     ));
   }
 
-  List<DataColumn> _createColumns() {
-    return const [
-      DataColumn(label: Text('Price')),
-      DataColumn(label: Text('Quantity')),
-    ];
-  }
-
   List<DataRow> _createRows(List<OrderEntry> entries,
       {required Function(OrderEntry) onCellClick}) {
     return entries
-        .take(10)
-        .map((delta) => DataRow(
-              cells: [
-                DataCell(
-                    Text(delta.price.toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: delta.side == SideEnum.buy
-                                ? kBidsColor
-                                : kAsksColor)), onTap: () {
-                  onCellClick(delta);
-                }),
-                DataCell(Text(delta.quantity.round().toString()), onTap: () {
-                  onCellClick(delta);
-                }),
-              ],
-            ))
+        .take(maxDepth)
+        .map(
+          (delta) => DataRow(cells: [
+            if (delta.side == SideEnum.buy) ...[
+              DataCell(Text(delta.quantity.round().toString()), onTap: () {
+                onCellClick(delta);
+              }),
+              DataCell(
+                  Text(delta.price.toString(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: kBidsColor)), onTap: () {
+                onCellClick(delta);
+              })
+            ] else if (delta.side == SideEnum.ask) ...[
+              DataCell(
+                  Text(delta.price.toString(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: kAsksColor)), onTap: () {
+                onCellClick(delta);
+              }),
+              DataCell(Text(delta.quantity.round().toString()), onTap: () {
+                onCellClick(delta);
+              })
+            ]
+          ]),
+        )
         .toList();
   }
 }

@@ -33,9 +33,6 @@ main() {
   setUp(() {
     mockSocketRepo = SocketRepoMock();
     orderCubit = OrderCubit(mockSocketRepo);
-    // when(mockSocketRepo.closeConnection()).thenAnswer((invocation) async {});
-    // when(mockSocketRepo.closeConnection()).thenAnswer((invocation) =>
-    //         () async {}());
   });
 
   tearDown(() {

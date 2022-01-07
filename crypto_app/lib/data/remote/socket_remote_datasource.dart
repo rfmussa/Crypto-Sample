@@ -32,8 +32,6 @@ class RemoteDataSource implements IRemoteDataSource {
     return socketService
         .subscribeToFeed()
         .skip(2) // Skip ack and subscription Message
-        //.map((event) => compute(mapResponseToResult, event));
-        //.asyncMap((message) => compute(mapResponseToResult, message));
         .asyncMap((message) => mapResponseToResult(message));
   }
 }
@@ -54,12 +52,14 @@ SocketResult mapResponseToResult(dynamic message) {
       return SocketResult.snapshot(bidsList, askList);
     } else {
       OrderModel messageModel = OrderModel.fromJson(decodedJson);
-      var orderEntry = OrderEntry(price: messageModel.price, quantity: messageModel.quantity, side: messageModel.side);
+      var orderEntry = OrderEntry(
+          price: messageModel.price,
+          quantity: messageModel.quantity,
+          side: messageModel.side);
       return SocketResult.tick((orderEntry));
     }
   } catch (e) {
     //TODO handle different exceptions
-    print(e.toString());
     return const SocketResult.error(('Unparsed Message'));
   }
 }

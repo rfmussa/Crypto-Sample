@@ -20,9 +20,4 @@ class OrderModel {
       _$OrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderModelToJson(this);
-
-  static DateTime _fromJson(int int) =>
-      DateTime.fromMillisecondsSinceEpoch(int);
-
-  static int _toJson(DateTime time) => time.millisecondsSinceEpoch;
 }

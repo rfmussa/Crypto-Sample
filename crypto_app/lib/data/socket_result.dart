@@ -1,7 +1,6 @@
 import 'package:crypto_app/ui/cubit/order_entry.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'model/order_model.dart';
 part 'socket_result.freezed.dart';
 
 @freezed
