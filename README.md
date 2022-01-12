@@ -8,6 +8,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
 ## Improvements to be made
+- Implement isolate groups for parsing json/ sorting lists
 - Externalize Styles and Widgets
 - Handle Socket reconnection
 - Display Loading indicator
